@@ -24,3 +24,13 @@ func (roomRepo *RoomRepository) GetAllRoom() ([]*domain.Room, error) {
 	}
 	return room, nil
 }
+
+func (roomRepo *RoomRepository) GetById(id int64) (*domain.Room, error) {
+	var room domain.Room
+	err := roomRepo.db.Where("id = ?", id).Take(&room).Error
+	if err != nil {
+		return nil, err
+	}
+	return &room, nil
+
+}

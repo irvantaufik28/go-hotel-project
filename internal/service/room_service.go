@@ -1,6 +1,8 @@
 package service
 
-import "github.com/irvantaufik28/go-hotel-project/domain"
+import (
+	"github.com/irvantaufik28/go-hotel-project/domain"
+)
 
 type roomServiceImpl struct {
 	RoomRepository domain.RoomRepository
@@ -34,4 +36,22 @@ func (service *roomServiceImpl) GetAllRoom() ([]*domain.RoomRes, error) {
 	}
 
 	return rooms, nil
+}
+
+func (service *roomServiceImpl) GetById(id int64) (*domain.RoomRes, error) {
+	room, err := service.RoomRepository.GetById(id)
+
+	if err != nil {
+		return nil, err
+	}
+	res := &domain.RoomRes{
+		Id:          room.Id,
+		Code:        room.Code,
+		Type:        room.Type,
+		Price:       room.Price,
+		Description: room.Description,
+		CreatedAt:   room.CreatedAt,
+		UpdatedAt:   room.UpdatedAt,
+	}
+	return res, nil
 }

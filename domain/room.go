@@ -24,8 +24,10 @@ type RoomRes struct {
 
 type RoomRepository interface {
 	GetAllRoom() ([]*Room, error)
+	GetById(id int64) (*Room, error)
 }
 
 type RoomService interface {
 	GetAllRoom() ([]*RoomRes, error)
+	GetById(id int64) (*RoomRes, error)
 }
