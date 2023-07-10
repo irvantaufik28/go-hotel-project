@@ -21,6 +21,9 @@ func (controller *RoomController) Route(app *gin.Engine) {
 	route := app.Group("/api/v1")
 	route.GET("/room", controller.FindAll)
 	route.GET("/room/:id", controller.FindById)
+	route.POST("/room", controller.Create)
+	route.PUT("/room/:id", controller.Update)
+	route.DELETE("/room/:id", controller.Delete)
 }
 
 func (controller *RoomController) FindAll(c *gin.Context) {
@@ -57,4 +60,63 @@ func (controller *RoomController) FindById(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{"data": res})
+}
+
+func (controller *RoomController) Create(c *gin.Context) {
+	var payload domain.RoomReq
+
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := controller.RoomService.Create(&payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"data": payload})
+}
+
+func (controller *RoomController) Update(c *gin.Context) {
+	id := c.Param("id")
+	idInt, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var payload domain.RoomReq
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = controller.RoomService.Update(idInt, &payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Room updated successfully"})
+}
+
+func (controller *RoomController) Delete(c *gin.Context) {
+	id := c.Param("id")
+	idInt, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	err = controller.RoomService.Delete(idInt)
+	if err != nil {
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete room"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Room deleted successfully"})
 }

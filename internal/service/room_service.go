@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/irvantaufik28/go-hotel-project/domain"
 )
 
@@ -54,4 +56,48 @@ func (service *roomServiceImpl) GetById(id int64) (*domain.RoomRes, error) {
 		UpdatedAt:   room.UpdatedAt,
 	}
 	return res, nil
+}
+
+func (service *roomServiceImpl) Create(payload *domain.RoomReq) error {
+	room := &domain.Room{
+		Code:        payload.Code,
+		Type:        payload.Type,
+		Price:       payload.Price,
+		Description: payload.Description,
+	}
+
+	err := service.RoomRepository.Create(room)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (service *roomServiceImpl) Update(id int64, payload *domain.RoomReq) error {
+	room := &domain.Room{
+		Code:        payload.Code,
+		Type:        payload.Type,
+		Price:       payload.Price,
+		Description: payload.Description,
+	}
+
+	err := service.RoomRepository.Update(id, room)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (service *roomServiceImpl) Delete(id int64) error {
+	log.Printf("Deleting room with ID: %d", id)
+
+	err := service.RoomRepository.Delete(id)
+	if err != nil {
+		log.Printf("Failed to delete room: %v", err)
+		return err
+	}
+
+	log.Printf("Room with ID %d deleted successfully", id)
+	return nil
 }

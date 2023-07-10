@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/irvantaufik28/go-hotel-project/domain"
 	"gorm.io/gorm"
 )
@@ -32,5 +34,52 @@ func (roomRepo *RoomRepository) GetById(id int64) (*domain.Room, error) {
 		return nil, err
 	}
 	return &room, nil
+}
 
+func (repo *RoomRepository) Create(room *domain.Room) error {
+	err := repo.db.Create(room).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (roomRepo *RoomRepository) Update(id int64, updatedRoom *domain.Room) error {
+	room := &domain.Room{}
+	err := roomRepo.db.First(room, id).Error
+	if err != nil {
+		return err
+	}
+
+	room.Code = updatedRoom.Code
+	room.Type = updatedRoom.Type
+	room.Price = updatedRoom.Price
+	room.Description = updatedRoom.Description
+
+	err = roomRepo.db.Save(room).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (roomRepo *RoomRepository) Delete(id int64) error {
+	log.Printf("Deleting room with ID: %d", id)
+
+	var room domain.Room
+	err := roomRepo.db.First(&room, id).Error
+	if err != nil {
+		log.Printf("Failed to find room: %v", err)
+		return err
+	}
+
+	err = roomRepo.db.Delete(&room).Error
+	if err != nil {
+		log.Printf("Failed to delete room: %v", err)
+		return err
+	}
+
+	log.Printf("Room with ID %d deleted successfully", id)
+	return nil
 }
