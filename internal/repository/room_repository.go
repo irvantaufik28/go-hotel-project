@@ -29,7 +29,7 @@ func (roomRepo *RoomRepository) GetAllRoom() ([]*domain.Room, error) {
 
 func (roomRepo *RoomRepository) GetById(id int64) (*domain.Room, error) {
 	var room domain.Room
-	err := roomRepo.db.Where("id = ?", id).Take(&room).Error
+	err := roomRepo.db.Preload("TypeRoom").Where("id = ?", id).Take(&room).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,9 +52,8 @@ func (roomRepo *RoomRepository) Update(id int64, updatedRoom *domain.Room) error
 	}
 
 	room.Code = updatedRoom.Code
-	room.Type = updatedRoom.Type
-	room.Price = updatedRoom.Price
-	room.Description = updatedRoom.Description
+	room.TypeRoomID = updatedRoom.TypeRoomID
+	room.Status = updatedRoom.Status
 
 	err = roomRepo.db.Save(room).Error
 	if err != nil {

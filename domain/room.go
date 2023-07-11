@@ -3,30 +3,28 @@ package domain
 import "time"
 
 type Room struct {
-	Id          int64     `gorm:"primaryKey" json:"id"`
-	Code        string    `gorm:"type:varchar(40)" json:"code"`
-	Type        string    `gorm:"type:varchar(40)" json:"type"`
-	Price       int64     `gorm:"type:int" json:"price"`
-	Description string    `gorm:"type:text" json:"description"`
-	CreatedAt   time.Time `gorm:"autoCreateTime" json:"createdAt"`
-	UpdatedAt   time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
+	Id         int64     `gorm:"primaryKey" json:"id"`
+	Code       string    `gorm:"type:varchar(40)" json:"code"`
+	TypeRoomID int64     `gorm:"type:int" json:"type_room_id"`
+	Status     string    `gorm:"type:varchar(40)" json:"status"`
+	CreatedAt  time.Time `gorm:"autoCreateTime" json:"createdAt"`
+	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
+	TypeRoom   TypeRoom  `gorm:"foreignKey:TypeRoomID" json:"type_room"`
 }
 
 type RoomRes struct {
-	Id          int64     `gorm:"primaryKey" json:"id"`
-	Code        string    `gorm:"type:varchar(40)" json:"code"`
-	Type        string    `gorm:"type:varchar(40)" json:"type"`
-	Price       int64     `gorm:"type:int" json:"price"`
-	Description string    `gorm:"type:text" json:"description"`
-	CreatedAt   time.Time `gorm:"autoCreateTime" json:"createdAt"`
-	UpdatedAt   time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
+	Id         int64     `gorm:"primaryKey" json:"id"`
+	Code       string    `gorm:"type:varchar(40)" json:"code"`
+	TypeRoomID int64     `gorm:"type:int" json:"type_room_id"`
+	Status     string    `gorm:"type:varchar(40)" json:"status"`
+	CreatedAt  time.Time `gorm:"autoCreateTime" json:"createdAt"`
+	UpdatedAt  time.Time `gorm:"autoUpdateTime" json:"updatedAt"`
 }
 
 type RoomReq struct {
-	Code        string `gorm:"type:varchar(40)" json:"code"`
-	Type        string `gorm:"type:varchar(40)" json:"type"`
-	Price       int64  `gorm:"type:int" json:"price"`
-	Description string `gorm:"type:text" json:"description"`
+	Code       string `gorm:"type:varchar(40)" json:"code"`
+	TypeRoomID int64  `gorm:"type:int" json:"type_room_id"`
+	Status     string `gorm:"type:varchar(40)" json:"status"`
 }
 
 type RoomRepository interface {

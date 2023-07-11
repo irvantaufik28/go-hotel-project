@@ -20,8 +20,12 @@ func main() {
 	roomRepository := repository.NewRoomRepository(config.DB)
 	roomService := service.NewRoomService(roomRepository)
 	roomController := httpcontroler.NewRoomController(roomService)
+	typeRoomRepository := repository.NewTypeRoomRepository(config.DB)
+	typeRoomService := service.NewTypeRoomService(typeRoomRepository)
+	typeRoomController := httpcontroler.NewTypeRoomController(typeRoomService)
 
 	roomController.Route(r)
+	typeRoomController.Route(r)
 	runWithPort := fmt.Sprintf("0.0.0.0:%s", port)
 	r.Run(runWithPort)
 }

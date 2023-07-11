@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/irvantaufik28/go-hotel-project/domain"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,7 +30,7 @@ func ConnectDatabase() {
 		panic("Failed to connect to database")
 	}
 
-	// db.AutoMigrate(&Room{})
+	db.AutoMigrate(&domain.Room{})
 
 	DB = db
 }

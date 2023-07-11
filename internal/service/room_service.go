@@ -26,13 +26,12 @@ func (service *roomServiceImpl) GetAllRoom() ([]*domain.RoomRes, error) {
 
 	for _, v := range room {
 		var room = domain.RoomRes{
-			Id:          v.Id,
-			Code:        v.Code,
-			Type:        v.Type,
-			Price:       v.Price,
-			Description: v.Description,
-			CreatedAt:   v.CreatedAt,
-			UpdatedAt:   v.UpdatedAt,
+			Id:         v.Id,
+			Code:       v.Code,
+			TypeRoomID: v.TypeRoomID,
+			Status:     v.Status,
+			CreatedAt:  v.CreatedAt,
+			UpdatedAt:  v.UpdatedAt,
 		}
 		rooms = append(rooms, &room)
 	}
@@ -47,23 +46,21 @@ func (service *roomServiceImpl) GetById(id int64) (*domain.RoomRes, error) {
 		return nil, err
 	}
 	res := &domain.RoomRes{
-		Id:          room.Id,
-		Code:        room.Code,
-		Type:        room.Type,
-		Price:       room.Price,
-		Description: room.Description,
-		CreatedAt:   room.CreatedAt,
-		UpdatedAt:   room.UpdatedAt,
+		Id:         room.Id,
+		Code:       room.Code,
+		TypeRoomID: room.TypeRoomID,
+		Status:     room.Status,
+		CreatedAt:  room.CreatedAt,
+		UpdatedAt:  room.UpdatedAt,
 	}
 	return res, nil
 }
 
 func (service *roomServiceImpl) Create(payload *domain.RoomReq) error {
 	room := &domain.Room{
-		Code:        payload.Code,
-		Type:        payload.Type,
-		Price:       payload.Price,
-		Description: payload.Description,
+		Code:       payload.Code,
+		TypeRoomID: payload.TypeRoomID,
+		Status:     payload.Status,
 	}
 
 	err := service.RoomRepository.Create(room)
@@ -76,10 +73,9 @@ func (service *roomServiceImpl) Create(payload *domain.RoomReq) error {
 
 func (service *roomServiceImpl) Update(id int64, payload *domain.RoomReq) error {
 	room := &domain.Room{
-		Code:        payload.Code,
-		Type:        payload.Type,
-		Price:       payload.Price,
-		Description: payload.Description,
+		Code:       payload.Code,
+		TypeRoomID: payload.TypeRoomID,
+		Status:     payload.Status,
 	}
 
 	err := service.RoomRepository.Update(id, room)
